@@ -7,10 +7,9 @@ import cv2
 import numpy as np
 import pandas as pd
 
-import torch.utils.data as DataLoader
+from torch.utils.data import Dataset
 
-
-class TraversabilityDataset(DataLoader.Dataset):
+class TraversabilityDataset(Dataset):
     '''
     Classe para carregar os dados do dataset
     '''
@@ -110,7 +109,7 @@ class TraversabilityDataset(DataLoader.Dataset):
 
         return color_img, depth_img, path_img, mu_img, nu_img, weight
 
-    def prepare(self, data):
+    def prepare(self, data: tuple) -> tuple:
         '''
         Prepara os dados
         :param data: dados
@@ -133,7 +132,7 @@ class TraversabilityDataset(DataLoader.Dataset):
 
         return color_fname_list, depth_fname_list, path_fname_list, mu_fname_list, nu_fname_list
 
-    def random_flip(self, color_img, depth_img, path_img, mu_img, nu_img):
+    def random_flip(self, color_img, depth_img, path_img, mu_img, nu_img) -> tuple:
         '''
         Aplica o flip aleatório
         :param color_img: imagem colorida
@@ -154,7 +153,7 @@ class TraversabilityDataset(DataLoader.Dataset):
 
         return color_img, depth_img, path_img, mu_img, nu_img
 
-    def prepare_weights(self):
+    def prepare_weights(self) -> tuple:
         '''
         Prepara os pesos
         '''
@@ -185,7 +184,7 @@ class TraversabilityDataset(DataLoader.Dataset):
 
         return (1-values*self.bin_width), bins
 
-    def get_depth_stats(self):
+    def get_depth_stats(self) -> None:
         '''
         Obtém as estatísticas da imagem de profundidade
         '''
