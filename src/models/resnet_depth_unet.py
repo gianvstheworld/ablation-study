@@ -36,28 +36,28 @@ class ResnetDepthUnet(nn.Module):
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True))
         self.block2_depth = nn.Sequential(
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding=1, stride=2, bias=False),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True))
+        self.block3_depth = nn.Sequential(
             nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1, stride=2, bias=False),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
             nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True))
-        self.block3_depth = nn.Sequential(
+        self.block4_depth = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, padding=1, stride=2, bias=False),
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
             nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True))
-        self.block4_depth = nn.Sequential(
-            nn.Conv2d(in_channels=256, out_channels=512, kernel_size=3, padding=1, stride=2, bias=False),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, padding=1, bias=False),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True))
         self.block5_depth = nn.Sequential(
-            nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, padding=1, stride=2, bias=False),
+            nn.Conv2d(in_channels=256, out_channels=512, kernel_size=3, padding=1, stride=2, bias=False),
             nn.BatchNorm2d(512),
             nn.ReLU(inplace=True),
             nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, padding=1, bias=False),
@@ -141,7 +141,7 @@ class ResnetDepthUnet(nn.Module):
         # Bottleneck - reduz o número de canais de saída do encoder antes da etapa de codidicação 
         x = self.bottleneck(out5)
 
-        # Decoder - aumentando o número de canais de saída do encoder
+        # Decoder
         x = torch.cat((x, out5), dim=1)
         x = self.convTrans1(x)
         diffY = out4.size()[2] - x.size()[2]
