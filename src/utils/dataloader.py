@@ -204,5 +204,7 @@ class TraversabilityDataset(Dataset):
         total_mean = psum/count
         total_std = np.sqrt(psum_sq / count - (total_mean ** 2))
 
+        print('Max score:', np.max(depth_img))
+        print('Min score:', np.min(depth_img))
         print('Depth mean:', total_mean)
         print('Depth std:', total_std) 
