@@ -1,4 +1,6 @@
-# Descrição: Data loader para o dataset de traversabilidade
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 # Importando bibliotecas
 import os
 import random
@@ -9,7 +11,7 @@ import pandas as pd
 
 from torch.utils.data import Dataset
 
-class TraversabilityDataset(Dataset):
+class TravNetDataset(Dataset):
     '''
     Classe para carregar os dados do dataset
     '''
@@ -18,8 +20,8 @@ class TraversabilityDataset(Dataset):
         '''
         Construtor da classe
         :param params: parâmetros do dataset
-        :param transform: transformação a ser aplicada nas imagens'''
-
+        :param transform: transformação a ser aplicada nas imagens
+        '''
         print("Initializing dataset")
         self.root = params.data_path  # Caminho para os dados
         self.transform = transform  # Transformação dos dados

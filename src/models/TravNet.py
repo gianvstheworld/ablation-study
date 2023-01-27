@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class ResnetDepthUnet(nn.Module):
+class TravNet(nn.Module):
     '''
     Classe para o modelo da rede neural TravNet (Modelo de rede neural usando a
     arquitetura ResNet18 como base e adaptando-o para o formato Unet)
