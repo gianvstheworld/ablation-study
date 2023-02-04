@@ -82,7 +82,7 @@ def load_data():
 
     return train_loader, val_loader
 
-def fit(net, criterion, optimizer, scheduler, train_loader, val_loader, device):
+def fit(net, criterion, optimizer, scheduler, train_loader, val_loader):
     patience = 10 # Número de épocas sem melhora na perda de validação para parar o treinamento
     counter = 0 # Contador para o número de épocas sem melhora na perda de validação
 
@@ -203,7 +203,7 @@ if __name__ == '__main__':
     optimizer = torch.optim.Adam(net.parameters(), lr=params.learning_rate, weight_decay=params.weight_decay) # Verificar o melhor otimizador para o modelo
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5, verbose=True) # Reduz a taxa de aprendizado quando a perda não melhora
 
-    train = fit(net=net, criterion=criterion, optimizer=optimizer, scheduler=scheduler, train_loader=train_data, val_loader=val_data, device=device) 
+    train = fit(net=net, criterion=criterion, optimizer=optimizer, scheduler=scheduler, train_loader=train_data, val_loader=val_data) 
 
     torch.save(net.module.state_dict(),'checkpoints/predictor_depth.pth')
 
