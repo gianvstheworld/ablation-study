@@ -5,9 +5,7 @@
 import os
 import torch
 import numpy as np
-# import matplotlib.pyplot as plt
-
-# %matplotlib inline
+import matplotlib.pyplot as plt
 
 # Importando bibliotecas úteis para a rede
 from torch.utils.data import DataLoader
@@ -75,17 +73,9 @@ def load_data():
     train_loader    = DataLoader(train_dataset, batch_size=params.batch_size, shuffle=True, num_workers=2)
     val_loader     = DataLoader(val_dataset, batch_size=params.batch_size, shuffle=True, num_workers=2)
 
-    # Informações sobre o dataset
-    num_images = len(dataset)
     print('Total loaded %d images' % len(dataset))
     print('Loaded %d train images' % train_size)
     print('Loaded %d valid images' % val_size)
-
-    # Adicionar um contador
-    count = 0
-    for batch_idx, data in enumerate(train_loader):
-        count += len(data)
-        print("Loaded {:.2f}% of the training data".format(100 * count / num_images))
 
     return train_loader, val_loader
 
@@ -166,8 +156,7 @@ def fit(net, criterion, optimizer, scheduler, train_loader, val_loader):
                     net.module.load_state_dict(torch.load('checkpoints/best_predictor_depth.pth'))
                     print('Early stopping!')
                     break
-
-        '''
+        
         # Apresenta a perda de validação
         if (epoch + 1) % 5 == 0:
             plt.figure(figsize = (14,14))
@@ -176,7 +165,7 @@ def fit(net, criterion, optimizer, scheduler, train_loader, val_loader):
             plt.subplot(1, 3, 2)
             plt.imshow(255*pred[0,0,:,:].detach().cpu().numpy(), vmin=0, vmax=255)
             plt.show(block=False)
-        '''
+        
 
 if __name__ == '__main__':
     global device
