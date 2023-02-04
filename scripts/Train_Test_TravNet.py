@@ -76,9 +76,16 @@ def load_data():
     val_loader     = DataLoader(val_dataset, batch_size=params.batch_size, shuffle=True, num_workers=2)
 
     # Informações sobre o dataset
+    num_images = len(dataset)
     print('Total loaded %d images' % len(dataset))
     print('Loaded %d train images' % train_size)
     print('Loaded %d valid images' % val_size)
+
+    # Adicionar um contador
+    count = 0
+    for batch_idx, data in enumerate(train_loader):
+        count += len(data)
+        print("Loaded {:.2f}% of the training data".format(100 * count / num_images))
 
     return train_loader, val_loader
 
