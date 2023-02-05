@@ -28,7 +28,7 @@ class Object(object):
 
 params = Object() # Cria um objeto para armazenar os parâmetros
 # Parametros do dataset
-params.data_path        = r'/home/gian/Documentos/Códigos/IC/ablation-study/data/' 
+params.data_path        = r'/home/gian/Documentos/Códigos/IC/ablation-study/data/' # /home/ubuntu/ablation-study/data/
 params.csv_path         = os.path.join(params.data_path, 'data.csv')
 params.preproc          = True  # Vertical flip augmentation - inverte a imagem verticalmente
 params.depth_mean       = 3.5235
