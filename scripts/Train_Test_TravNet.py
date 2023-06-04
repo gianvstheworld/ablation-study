@@ -28,7 +28,7 @@ class Object(object):
 
 params = Object() # Cria um objeto para armazenar os parâmetros
 # Parametros do dataset
-params.data_path        = r'/home/gian/Documentos/Códigos/IC/ablation-study/data/' 
+params.data_path        = r'/home/ubuntu/ablation-study/data/' 
 params.csv_path         = os.path.join(params.data_path, 'data.csv')
 params.preproc          = True  # Vertical flip augmentation - inverte a imagem verticalmente
 params.depth_mean       = 3.5235
@@ -36,7 +36,7 @@ params.depth_std        = 10.6645
 
 # Parametros de treino
 params.seed             = 230 # Seed para o gerador de números aleatórios - como saber a melhor seed para o modelo?
-params.epochs           = 50
+params.epochs           = 5
 params.batch_size       = 16
 params.learning_rate    = 1e-4
 params.weight_decay     = 1e-5
@@ -80,6 +80,8 @@ def load_data():
     return train_loader, val_loader
 
 def fit(net, criterion, optimizer, scheduler, train_loader, val_loader):
+    print('Training TravNet') 
+
     patience = 10 # Número de épocas sem melhora na perda de validação para parar o treinamento
     counter = 0 # Contador para o número de épocas sem melhora na perda de validação
 
@@ -110,7 +112,7 @@ def fit(net, criterion, optimizer, scheduler, train_loader, val_loader):
             train_loss += loss.item() # Somando a perda de cada batch
         
         # Atualiza a taxa de aprendizado
-        scheduler.step()
+        scheduler.step(train_loss)
 
         train_loss /= len(train_loader) # Calcula a perda média
         train_loss_list.append(train_loss) # Adiciona a perda média na lista de perdas de treino
