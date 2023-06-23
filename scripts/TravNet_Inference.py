@@ -1,4 +1,3 @@
-# Script para calcular o tempo de inferência da rede para uma imagem qualquer
 import torch
 import time
 
