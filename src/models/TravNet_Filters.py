@@ -27,7 +27,20 @@ class TravNet_Filters(nn.Module):
         self.block2 = nn.Sequential(model.maxpool, model.layer2) # MaxPool e três camadas de Conv - BatchNorm - ReLu
         self.block3 = model.layer3 # Quatro camadas (Conv - BatchNorm - ReLu)
         self.block4 = model.layer4 # Quatro camadas (Conv - BatchNorm - ReLu)
-        self.block5 = model.layer4 # Quatro camadas (Conv - BatchNorm - ReLu)
+        self.block5 = nn.Sequential(
+            nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=2, padding=1, bias=False),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=512, out_channels=512, kernel_size=3, stride=1, padding=1, bias=False),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True)
+        )
         # Esses blocos serão usados para codificar a imagem de entrada em um vetor de características
 
         # Depth Encoder - Alteração no número de canais de entrada em comparação ao código original
@@ -127,6 +140,8 @@ class TravNet_Filters(nn.Module):
         out1 = out1 + out1_depth
         out2 = self.block2(out1)
         out2_depth = self.block2_depth(out1_depth)
+        desired_out2 = (2, 128, 60, 106)
+        out2 = F.pad(out2, (0, desired_out2[3] - out2.shape[3], 0, desired_out2[2] - out2.shape[2]))
         out2 = out2 + out2_depth
         out3 = self.block3(out2)
         out3_depth = self.block3_depth(out2_depth)
@@ -134,6 +149,7 @@ class TravNet_Filters(nn.Module):
         out4 = self.block4(out3)
         out4_depth = self.block4_depth(out3_depth)
         out4 = out4 + out4_depth
+        print(out4.shape)
         out5 = self.block5(out4)
         out5_depth = self.block5_depth(out4_depth)
         out5 = out5 + out5_depth
