@@ -1,0 +1,2 @@
+rrt
+-DCATKIN_DEVEL_PREFIX=/home/gian/Documentos/Códigos/IC/ablation-study/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/gian/Documentos/Códigos/IC/ablation-study/catkin_ws/install -G Unix Makefiles

@@ -1,0 +1,8 @@
+prefix=/home/gian/Documentos/Códigos/IC/ablation-study/catkin_ws/devel
+
+Name: rrt
+Description: Description of rrt
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
