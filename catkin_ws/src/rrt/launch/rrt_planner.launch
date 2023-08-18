@@ -1,0 +1,3 @@
+<launch>
+    <node name="rrt_planner_node" pkg="rrt" type="rrt.py" output="screen"/>
+</launch>

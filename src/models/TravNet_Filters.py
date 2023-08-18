@@ -149,7 +149,6 @@ class TravNet_Filters(nn.Module):
         out4 = self.block4(out3)
         out4_depth = self.block4_depth(out3_depth)
         out4 = out4 + out4_depth
-        print(out4.shape)
         out5 = self.block5(out4)
         out5_depth = self.block5_depth(out4_depth)
         out5 = out5 + out5_depth
