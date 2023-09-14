@@ -7,7 +7,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
 class TravNet(nn.Module):
     def __init__(self, params) -> None:
         '''
@@ -33,18 +32,18 @@ class TravNet(nn.Module):
         self.block3 = model.layer2
         self.block4 = model.layer3
         # ORIGINAL
-        # self.block5 = model.layer4
+        self.block5 = model.layer4
         # MODIFICADO
-        self.block5 = nn.Sequential(
-            nn.Conv2d(in_channels=128, out_channels=512,
-                      kernel_size=3, padding=1, stride=2, bias=False),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(in_channels=512, out_channels=512,
-                      kernel_size=3, padding=1, bias=False),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True)
-        )
+        # self.block5 = nn.Sequential(
+        #     nn.Conv2d(in_channels=128, out_channels=512,
+        #               kernel_size=3, padding=1, stride=2, bias=False),
+        #     nn.BatchNorm2d(512),
+        #     nn.ReLU(inplace=True),
+        #     nn.Conv2d(in_channels=512, out_channels=512,
+        #               kernel_size=3, padding=1, bias=False),
+        #     nn.BatchNorm2d(512),
+        #     nn.ReLU(inplace=True)
+        # )
 
         self.block1_depth = nn.Sequential(
             nn.Conv2d(in_channels=1, out_channels=64, kernel_size=7,
@@ -84,55 +83,65 @@ class TravNet(nn.Module):
             nn.ReLU(inplace=True))
 
         # ORIGINAL
-        # self.block4_depth = nn.Sequential(
-        #     nn.Conv2d(in_channels=128, out_channels=256,
-        #               kernel_size=3, padding=1, stride=2, bias=False),
-        #     nn.BatchNorm2d(256),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(in_channels=256, out_channels=256,
-        #               kernel_size=3, padding=1, bias=False),
-        #     nn.BatchNorm2d(256),
-        #     nn.ReLU(inplace=True))
-        # MODIFICADO
         self.block4_depth = nn.Sequential(
-            nn.Conv2d(in_channels=64, out_channels=128,
-                      kernel_size=3, padding=1, stride=2, bias=False),
-            nn.BatchNorm2d(128),
-            nn.ReLU(inplace=True),
-            nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3,
-                      padding=1, bias=False),  # Adicionada camada de convolução
-            nn.BatchNorm2d(256),
-            nn.ReLU(inplace=True))
-
-        # ORIGINAL
-        # self.block5_depth = nn.Sequential(
-        #     nn.Conv2d(in_channels=256, out_channels=512,
-        #               kernel_size=3, padding=1, stride=2, bias=False),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(in_channels=512, out_channels=512,
-        #               kernel_size=3, padding=1, bias=False),
-        #     nn.BatchNorm2d(512),
-        #     nn.ReLU(inplace=True))
-        # MODIFICADO
-        self.block5_depth = nn.Sequential(
             nn.Conv2d(in_channels=128, out_channels=256,
                       kernel_size=3, padding=1, stride=2, bias=False),
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=256, out_channels=256,
+                      kernel_size=3, padding=1, bias=False),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True))
+        # MODIFICADO
+        # self.block4_depth = nn.Sequential(
+        #     nn.Conv2d(in_channels=64, out_channels=128,
+        #               kernel_size=3, padding=1, stride=2, bias=False),
+        #     nn.BatchNorm2d(128),
+        #     nn.ReLU(inplace=True),
+        #     nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3,
+        #               padding=1, bias=False),  # Adicionada camada de convolução
+        #     nn.BatchNorm2d(256),
+        #     nn.ReLU(inplace=True))
+
+        # ORIGINAL
+        self.block5_depth = nn.Sequential(
             nn.Conv2d(in_channels=256, out_channels=512,
+                      kernel_size=3, padding=1, stride=2, bias=False),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=512, out_channels=512,
                       kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True)
-        )
+            nn.ReLU(inplace=True))
+        # MODIFICADO
+        # self.block5_depth = nn.Sequential(
+        #     nn.Conv2d(in_channels=128, out_channels=256,
+        #               kernel_size=3, padding=1, stride=2, bias=False),
+        #     nn.BatchNorm2d(256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Conv2d(in_channels=256, out_channels=512,
+        #               kernel_size=3, padding=1, bias=False),
+        #     nn.BatchNorm2d(512),
+        #     nn.ReLU(inplace=True)
+        # )
 
+        # ORIGINAL
+        # self.bottleneck = nn.Sequential(
+        #     nn.Conv2d(in_channels=512, out_channels=params.bottleneck_dim,
+        #               kernel_size=3, padding=1, bias=False),
+        #     nn.ReLU(inplace=True),
+        #     nn.Conv2d(in_channels=params.bottleneck_dim,
+        #               out_channels=256, kernel_size=3, padding=1, bias=False),
+        #     nn.ReLU(inplace=True))
+        # MODIFICADO
         self.bottleneck = nn.Sequential(
-            nn.Conv2d(in_channels=512, out_channels=params.bottleneck_dim,
+            nn.Conv2d(in_channels=256, out_channels=params.bottleneck_dim,
                       kernel_size=3, padding=1, bias=False),
             nn.ReLU(inplace=True),
             nn.Conv2d(in_channels=params.bottleneck_dim,
                       out_channels=256, kernel_size=3, padding=1, bias=False),
-            nn.ReLU(inplace=True))
+            nn.ReLU(inplace=True)
+        )
 
         self.convTrans1 = nn.Sequential(
             nn.ConvTranspose2d(in_channels=512+256,
@@ -144,37 +153,49 @@ class TravNet(nn.Module):
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True))
 
+        # ORIGINAL
+        # self.convTrans2 = nn.Sequential(
+        #     nn.ConvTranspose2d(in_channels=256+128,
+        #                        out_channels=128, kernel_size=2, stride=2),
+        #     nn.BatchNorm2d(128),
+        #     nn.ReLU(inplace=True),
+        #     nn.Conv2d(in_channels=128, out_channels=64,
+        #               kernel_size=3, padding=1, bias=False),
+        #     nn.BatchNorm2d(64),
+        #     nn.ReLU(inplace=True))
+        # MODIFICADO
         self.convTrans2 = nn.Sequential(
-            nn.ConvTranspose2d(in_channels=256+128,
-                               out_channels=128, kernel_size=2, stride=2),
+            nn.ConvTranspose2d(
+                in_channels=512, out_channels=128, kernel_size=2, stride=2),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
             nn.Conv2d(in_channels=128, out_channels=64,
                       kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(64),
-            nn.ReLU(inplace=True))
+            nn.ReLU(inplace=True)
+        )
 
         # ORIGINAL
-        # self.convTrans3 = nn.Sequential(
-        #     nn.ConvTranspose2d(in_channels=128+64,
-        #                        out_channels=64, kernel_size=2, stride=2),
-        #     nn.BatchNorm2d(64),
-        #     nn.ReLU(inplace=True),
-        #     nn.Conv2d(in_channels=64, out_channels=32,
-        #               kernel_size=3, padding=1, bias=False),
-        #     nn.BatchNorm2d(32),
-        #     nn.ReLU(inplace=True))
-        # MODIFICADO
         self.convTrans3 = nn.Sequential(
-            nn.ConvTranspose2d(
-                in_channels=256, out_channels=64, kernel_size=2, stride=2),
+            nn.ConvTranspose2d(in_channels=128+64,
+                               out_channels=64, kernel_size=2, stride=2),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             nn.Conv2d(in_channels=64, out_channels=32,
                       kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(32),
-            nn.ReLU(inplace=True)
-        )
+            nn.ReLU(inplace=True))
+        # MODIFICADO
+        # self.convTrans3 = nn.Sequential(
+        #     nn.ConvTranspose2d(
+        #         in_channels=256, out_channels=64, kernel_size=2, stride=2),
+        #     nn.BatchNorm2d(64),
+        #     nn.ReLU(inplace=True),
+        #     nn.Conv2d(in_channels=64, out_channels=32,
+        #               kernel_size=3, padding=1, bias=False),
+        #     nn.BatchNorm2d(32),
+        #     nn.ReLU(inplace=True)
+        # )
 
         # ORIGINAL
         # self.convTrans4 = nn.Sequential(
@@ -186,13 +207,14 @@ class TravNet(nn.Module):
         #               kernel_size=3, padding=1, bias=False),
         #     nn.BatchNorm2d(64),
         #     nn.ReLU(inplace=True))
+        # MODIFICADO
         self.convTrans4 = nn.Sequential(
-            nn.ConvTranspose2d(
-                in_channels=96, out_channels=128, kernel_size=2, stride=2),
+            nn.ConvTranspose2d(in_channels=96, out_channels=128,
+                            kernel_size=2, stride=2),
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
             nn.Conv2d(in_channels=128, out_channels=64,
-                      kernel_size=3, padding=1, bias=False),
+                    kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True)
         )
@@ -231,25 +253,25 @@ class TravNet(nn.Module):
         out3_depth = self.block3_depth(out2_depth)
         out3 = out3 + out3_depth
 
-        # out4 = self.block4(out2)
-        # out4_depth = self.block4_depth(out2_depth)
-        # out4 = out4 + out4_depth
+        out4 = self.block4(out3)
+        out4_depth = self.block4_depth(out3_depth)
+        out4 = out4 + out4_depth
 
-        out5 = self.block5(out3)
-        out5_depth = self.block5_depth(out3_depth)
-        out5 = out5 + out5_depth
+        # out5 = self.block5(out3)
+        # out5_depth = self.block5_depth(out3_depth)
+        # out5 = out5 + out5_depth
 
-        x = self.bottleneck(out5)
+        x = self.bottleneck(out4)
 
-        x = torch.cat((x, out5), dim=1)
-        x = self.convTrans1(x)
+        # x = torch.cat((x, out5), dim=1)
+        # x = self.convTrans1(x)
 
-        # diffY = out4.size()[2] - x.size()[2]
-        # diffX = out4.size()[3] - x.size()[3]
-        # x = F.pad(x, [diffX // 2, diffX - diffX //
-        #           2, diffY // 2, diffY - diffY // 2])
-        # x = torch.cat((x, out4), dim=1)
-        # x = self.convTrans2(x)
+        diffY = out4.size()[2] - x.size()[2]
+        diffX = out4.size()[3] - x.size()[3]
+        x = F.pad(x, [diffX // 2, diffX - diffX //
+                  2, diffY // 2, diffY - diffY // 2])
+        x = torch.cat((x, out4), dim=1)
+        x = self.convTrans2(x)
 
         diffY = out3.size()[2] - x.size()[2]
         diffX = out3.size()[3] - x.size()[3]
