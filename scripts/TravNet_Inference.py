@@ -2,6 +2,7 @@ import torch
 import time
 
 from PIL import Image
+import matplotlib.pyplot as plt
 from torchvision import transforms
 
 import sys
@@ -61,6 +62,13 @@ if torch.cuda.is_available():
 start = time.time()
 with torch.no_grad():
     output = model(rgb.cuda().float(), depth.cuda().float())
+
+    pred = output.squeeze().cpu().numpy()
 end = time.time()
+
+# Exibindo a imagem
+plt.imshow(pred, cmap='gray')
+plt.colorbar() 
+plt.show()
 
 print('Tempo de inferência: {:.4f} segundos'.format(end - start))
